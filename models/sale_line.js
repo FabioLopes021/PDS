@@ -34,7 +34,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__sale_lin__3059D05D0E0C9033",
+        name: "PK__sale_lin__3059D05D157F3162",
         unique: true,
         fields: [
           { name: "sale_lid" },

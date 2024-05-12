@@ -10,14 +10,13 @@ exports.login = async (req, res) => {
 		let password = req.body.password;
 
 		let user = await db.user.findOne({ where: { user_email: email } });
-
 		if (!user) {
 			return res.status(401).send({ success: 0, message: 'Falha na autenticação' });
 		}
 		if (bcrypt.compareSync(password, user.user_password)) {
 			let token = jwt.sign(
 				{
-					uid: user.uid,
+					id: user.uid,
 				},
 				'#^NJW5SKJ$Oke&Q=QJAR{hfAt9BH^e',
 				{
@@ -32,7 +31,6 @@ exports.login = async (req, res) => {
 				token: token,
 			});
 		}
-
 		return res.status(401).send({ success: 0, message: 'Falha na autenticação' });
 	} catch (err) {
 		return res.status(500).send({ error: err, message: err.message });
@@ -43,9 +41,9 @@ exports.register = async (req, res) => {
 	try {
 		
 		let { email, password, name, status, type } = req.body;
-		console.log("debug0")
+
 		let existingUser = await db.user.findOne({ where: { user_email: email } });
-		console.log("debug1")
+
 		if (existingUser) {
 			return res.status(409).send({ success: 0, message: 'Utilizador já registado' });
 		}

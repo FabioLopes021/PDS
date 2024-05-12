@@ -18,14 +18,6 @@ module.exports = function(sequelize, DataTypes) {
         model: 'user',
         key: 'uid'
       }
-    },
-    user_typeutid: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'user_type',
-        key: 'utid'
-      }
     }
   }, {
     sequelize,
@@ -34,7 +26,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__usermuse__1DA64CBAF797336E",
+        name: "PK__usermuse__1DA64CBA1A8B1D30",
         unique: true,
         fields: [
           { name: "museummid" },

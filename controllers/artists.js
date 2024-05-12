@@ -58,14 +58,12 @@ exports.addArtist = async (req, res) => {
 		let name = req.body.name;
 		let birthday = req.body.birthday;
 		let idOwner = req.body.idOwner;
-		let idUserToken = req.user.uid;
+		let idUserToken = req.user.id;
 
-		
 		let isAdmin = await utils.isAdmin(idUserToken); //Verificar
 		if (!isAdmin && idOwner != idUserToken) {
 			return res.status(403).send({ success: 0, message: "Sem permissão" });
 		}
-		
 		
 		let user = await db.user.findByPk(idOwner);
 		if (!user) {
