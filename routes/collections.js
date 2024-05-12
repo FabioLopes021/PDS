@@ -11,9 +11,9 @@ router.get("/collections", collectionsController.getCollections);
 router.get("/collections/:id", collectionsController.getCollection);
 // Add collection
 router.post("/collections/add", login.required, collectionsController.addCollection);
-// // Edit artist
-// router.put("/collections/edit/:id", login.required, collectionsController.editArtist);
-// // Remove artist
-// router.delete("/collections/remove/:id", login.required, collectionsController.removeArtist);
+// Edit collection
+router.put("/collections/edit/:id", login.required, collectionsController.editCollection);
+// Remove artist
+router.delete("/collections/remove/:id", login.required, collectionsController.removeCollection);
 
 module.exports = router;
