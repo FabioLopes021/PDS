@@ -30,14 +30,28 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'ad',
-    schema: 'dbo',
     timestamps: false,
     indexes: [
       {
-        name: "PK__ad__56B503F094424349",
+        name: "PRIMARY",
         unique: true,
+        using: "BTREE",
         fields: [
           { name: "adid" },
+        ]
+      },
+      {
+        name: "FKad393708",
+        using: "BTREE",
+        fields: [
+          { name: "useruid" },
+        ]
+      },
+      {
+        name: "FKad263245",
+        using: "BTREE",
+        fields: [
+          { name: "piecepid" },
         ]
       },
     ]

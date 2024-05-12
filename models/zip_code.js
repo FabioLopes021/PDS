@@ -14,12 +14,12 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'zip_code',
-    schema: 'dbo',
     timestamps: false,
     indexes: [
       {
-        name: "PK__zip_code__240C764DD75FF724",
+        name: "PRIMARY",
         unique: true,
+        using: "BTREE",
         fields: [
           { name: "zipid" },
         ]

@@ -1,9 +1,9 @@
-const Sequelize = require('sequelize');
-const initModels = require('../models/init-models');
+const Sequelize = require("sequelize");
+const initModels = require("../models/init-models");
 
-const sequelize = new Sequelize('musewww', 'sa', '123456', {
-  host: '120.79.0.128',
-  dialect: 'mssql'
+const sequelize = new Sequelize("musewww", "test", "test", {
+  host: "localhost",
+  dialect: "mysql",
 });
 
 const db = initModels(sequelize);

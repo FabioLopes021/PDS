@@ -26,18 +26,40 @@ module.exports = function(sequelize, DataTypes) {
         model: 'user_status',
         key: 'us_id'
       }
+    },
+    user_typeutid: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'user_type',
+        key: 'utid'
+      }
     }
   }, {
     sequelize,
     tableName: 'user',
-    schema: 'dbo',
     timestamps: false,
     indexes: [
       {
-        name: "PK__user__DD7012641E2BF3A3",
+        name: "PRIMARY",
         unique: true,
+        using: "BTREE",
         fields: [
           { name: "uid" },
+        ]
+      },
+      {
+        name: "FKuser33915",
+        using: "BTREE",
+        fields: [
+          { name: "user_typeutid" },
+        ]
+      },
+      {
+        name: "FKuser470631",
+        using: "BTREE",
+        fields: [
+          { name: "user_statusus_id" },
         ]
       },
     ]

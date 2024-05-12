@@ -12,18 +12,18 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     artist_birthdate: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: true
     }
   }, {
     sequelize,
     tableName: 'artist',
-    schema: 'dbo',
     timestamps: false,
     indexes: [
       {
-        name: "PK__artist__DE508E2E13034EEF",
+        name: "PRIMARY",
         unique: true,
+        using: "BTREE",
         fields: [
           { name: "aid" },
         ]

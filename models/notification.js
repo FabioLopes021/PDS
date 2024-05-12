@@ -30,14 +30,28 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'notification',
-    schema: 'dbo',
     timestamps: false,
     indexes: [
       {
-        name: "PK__notifica__DF97D0F528002D28",
+        name: "PRIMARY",
         unique: true,
+        using: "BTREE",
         fields: [
           { name: "nid" },
+        ]
+      },
+      {
+        name: "FKnotificati112025",
+        using: "BTREE",
+        fields: [
+          { name: "notification_typentid" },
+        ]
+      },
+      {
+        name: "FKnotificati836782",
+        using: "BTREE",
+        fields: [
+          { name: "useruid" },
         ]
       },
     ]

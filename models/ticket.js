@@ -8,7 +8,7 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true
     },
     ticket_purchase_date: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false
     },
     ticket_price: {
@@ -42,14 +42,35 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'ticket',
-    schema: 'dbo',
     timestamps: false,
     indexes: [
       {
-        name: "PK__ticket__DC105B0F0A233B75",
+        name: "PRIMARY",
         unique: true,
+        using: "BTREE",
         fields: [
           { name: "tid" },
+        ]
+      },
+      {
+        name: "FKticket844838",
+        using: "BTREE",
+        fields: [
+          { name: "eventeid" },
+        ]
+      },
+      {
+        name: "FKticket358381",
+        using: "BTREE",
+        fields: [
+          { name: "useruid" },
+        ]
+      },
+      {
+        name: "FKticket303505",
+        using: "BTREE",
+        fields: [
+          { name: "ticket_statusts_id" },
         ]
       },
     ]

@@ -22,14 +22,21 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'ad_state',
-    schema: 'dbo',
     timestamps: false,
     indexes: [
       {
-        name: "PK__ad_state__E9529D23615E0E57",
+        name: "PRIMARY",
         unique: true,
+        using: "BTREE",
         fields: [
           { name: "adstid" },
+        ]
+      },
+      {
+        name: "FKad_state106895",
+        using: "BTREE",
+        fields: [
+          { name: "adsadid" },
         ]
       },
     ]

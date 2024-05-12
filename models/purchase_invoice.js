@@ -8,7 +8,7 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true
     },
     purchase_entry_date: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: true
     },
     museummid: {
@@ -22,21 +22,29 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'purchase_invoice',
-    schema: 'dbo',
     timestamps: false,
     indexes: [
       {
-        name: "purchase_invoice_purchase_invoiceid",
+        name: "PRIMARY",
         unique: true,
+        using: "BTREE",
         fields: [
           { name: "purchase_invoiceid" },
         ]
       },
       {
-        name: "purid",
+        name: "purchase_invoiceid",
         unique: true,
+        using: "BTREE",
         fields: [
           { name: "purchase_invoiceid" },
+        ]
+      },
+      {
+        name: "FKpurchase_i720943",
+        using: "BTREE",
+        fields: [
+          { name: "museummid" },
         ]
       },
     ]

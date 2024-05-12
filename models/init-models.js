@@ -136,6 +136,8 @@ function initModels(sequelize) {
   product.hasMany(sale_line, { as: "sale_lines", foreignKey: "productprodid"});
   product.belongsTo(product_type, { as: "product_typept", foreignKey: "product_typeptid"});
   product_type.hasMany(product, { as: "products", foreignKey: "product_typeptid"});
+  purchase_line.belongsTo(purchase_invoice, { as: "purchase_invoicepurchase_invoice", foreignKey: "purchase_invoicepurchase_invoiceid"});
+  purchase_invoice.hasMany(purchase_line, { as: "purchase_lines", foreignKey: "purchase_invoicepurchase_invoiceid"});
   sale_line.belongsTo(sale_invoice, { as: "sale_invoicesale_invoice", foreignKey: "sale_invoicesale_invoiceid"});
   sale_invoice.hasMany(sale_line, { as: "sale_lines", foreignKey: "sale_invoicesale_invoiceid"});
   support_ticket.belongsTo(support_state, { as: "support_statesss", foreignKey: "support_statesssid"});
@@ -170,8 +172,8 @@ function initModels(sequelize) {
   user.hasMany(usermuseum, { as: "usermuseums", foreignKey: "useruid"});
   user.belongsTo(user_status, { as: "user_statusu", foreignKey: "user_statusus_id"});
   user_status.hasMany(user, { as: "users", foreignKey: "user_statusus_id"});
-  usermuseum.belongsTo(user_type, { as: "user_typeut", foreignKey: "user_typeutid"});
-  user_type.hasMany(usermuseum, { as: "usermuseums", foreignKey: "user_typeutid"});
+  user.belongsTo(user_type, { as: "user_typeut", foreignKey: "user_typeutid"});
+  user_type.hasMany(user, { as: "users", foreignKey: "user_typeutid"});
   proposal.belongsTo(usermuseum, { as: "usermuseummuseumm", foreignKey: "usermuseummuseummid"});
   usermuseum.hasMany(proposal, { as: "proposals", foreignKey: "usermuseummuseummid"});
   proposal.belongsTo(usermuseum, { as: "usermuseumuseru", foreignKey: "usermuseumuseruid"});

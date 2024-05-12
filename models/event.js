@@ -42,14 +42,35 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'event',
-    schema: 'dbo',
     timestamps: false,
     indexes: [
       {
-        name: "PK__event__D9509F6DF6A5DC43",
+        name: "PRIMARY",
         unique: true,
+        using: "BTREE",
         fields: [
           { name: "eid" },
+        ]
+      },
+      {
+        name: "FKevent956024",
+        using: "BTREE",
+        fields: [
+          { name: "event_typeetid" },
+        ]
+      },
+      {
+        name: "FKevent814262",
+        using: "BTREE",
+        fields: [
+          { name: "museummid" },
+        ]
+      },
+      {
+        name: "FKevent369126",
+        using: "BTREE",
+        fields: [
+          { name: "event_statuses_id" },
         ]
       },
     ]

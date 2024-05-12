@@ -18,26 +18,25 @@ module.exports = function(sequelize, DataTypes) {
         model: 'user',
         key: 'uid'
       }
-    },
-    user_typeutid: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'user_type',
-        key: 'utid'
-      }
     }
   }, {
     sequelize,
     tableName: 'usermuseum',
-    schema: 'dbo',
     timestamps: false,
     indexes: [
       {
-        name: "PK__usermuse__1DA64CBAF797336E",
+        name: "PRIMARY",
         unique: true,
+        using: "BTREE",
         fields: [
           { name: "museummid" },
+          { name: "useruid" },
+        ]
+      },
+      {
+        name: "FKusermuseum930007",
+        using: "BTREE",
+        fields: [
           { name: "useruid" },
         ]
       },

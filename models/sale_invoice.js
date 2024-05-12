@@ -8,7 +8,7 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true
     },
     invoice_departure_date: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: true
     },
     useruid: {
@@ -22,14 +22,21 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'sale_invoice',
-    schema: 'dbo',
     timestamps: false,
     indexes: [
       {
-        name: "PK__sale_inv__F67992D03BFBC99A",
+        name: "PRIMARY",
         unique: true,
+        using: "BTREE",
         fields: [
           { name: "sale_invoiceid" },
+        ]
+      },
+      {
+        name: "FKsale_invoi153001",
+        using: "BTREE",
+        fields: [
+          { name: "useruid" },
         ]
       },
     ]
