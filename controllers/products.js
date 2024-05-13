@@ -1,265 +1,275 @@
-const { where } = require('sequelize');
-const db = require('../config/mysql');
+const db = require("../config/mysql");
 const utils = require("../utils/index");
 
-
 exports.getAllProducts = async (req, res) => {
-	try {
-		let products = await db.product.findAll();
+  try {
+    let products = await db.product.findAll();
 
-		if (products.length === 0) return res.status(404).send({ success: 0, message: "Não existem produtos" });
+    if (products.length === 0)
+      return res
+        .status(404)
+        .send({ success: 0, message: "Não existem produtos" });
 
-		let response = {
-			success: 1,
-			length: products.length,
-			results: products.map((product) => {
-				return {
-					id: product.prodid,
-					name: product.product_name,
-                    price: product.product_price,
-                    quantity: product.product_quantity,
-                    museum: product.museummid,
-                    type: product.product_typeptid,
-				};
-			}),
-		};
-		return res.status(200).send(response);
-	} catch (err) {
-		return res.status(500).send({ error: err, message: err.message });
-	}
+    let response = {
+      success: 1,
+      length: products.length,
+      results: products.map((product) => {
+        return {
+          id: product.prodid,
+          name: product.product_name,
+          price: product.product_price,
+          quantity: product.product_quantity,
+          museum: product.museummid,
+          type: product.product_typeptid,
+        };
+      }),
+    };
+    return res.status(200).send(response);
+  } catch (err) {
+    return res.status(500).send({ error: err, message: err.message });
+  }
 };
-
 
 exports.getProductsByMuseum = async (req, res) => {
-	try {
-        let id = req.params.id;
-		let result = await db.museum.findOne({
-            where: {
-                mid: id
-            }
-        });
+  try {
+    let id = req.params.id;
+    let result = await db.museum.findOne({
+      where: {
+        mid: id,
+      },
+    });
 
-        if(!result){
-            return res.status(404).send({ success: 0, message: "Museu inexistente" });
-        }
+    if (!result) {
+      return res.status(404).send({ success: 0, message: "Museu inexistente" });
+    }
 
-        let products = await db.product.findAll({
-            where: {
-                museummid: id
-            }
-        })
+    let products = await db.product.findAll({
+      where: {
+        museummid: id,
+      },
+    });
 
-		if (products.length === 0) return res.status(404).send({ success: 0, message: "Não existem produtos associados a este museu" });
+    if (products.length === 0)
+      return res.status(404).send({
+        success: 0,
+        message: "Não existem produtos associados a este museu",
+      });
 
-		let response = {
-			success: 1,
-			length: products.length,
-			results: products.map((product) => {
-				return {
-					id: product.prodid,
-					name: product.product_name,
-                    price: product.product_price,
-                    quantity: product.product_quantity,
-                    museum: product.museummid,
-                    type: product.product_typeptid,
-				};
-			}),
-		};
-		return res.status(200).send(response);
-	} catch (err) {
-		return res.status(500).send({ error: err, message: err.message });
-	}
+    let response = {
+      success: 1,
+      length: products.length,
+      results: products.map((product) => {
+        return {
+          id: product.prodid,
+          name: product.product_name,
+          price: product.product_price,
+          quantity: product.product_quantity,
+          museum: product.museummid,
+          type: product.product_typeptid,
+        };
+      }),
+    };
+    return res.status(200).send(response);
+  } catch (err) {
+    return res.status(500).send({ error: err, message: err.message });
+  }
 };
-
 
 exports.getProductsByCategory = async (req, res) => {
-	try {
-        let id = req.params.id;
-		let result = await db.product_type.findOne({
-            where: {
-                ptid: id
-            }
-        });
+  try {
+    let id = req.params.id;
+    let result = await db.product_type.findOne({
+      where: {
+        ptid: id,
+      },
+    });
 
-        if(!result){
-            return res.status(404).send({ success: 0, message: "Categoria inexistente" });
-        }
+    if (!result) {
+      return res
+        .status(404)
+        .send({ success: 0, message: "Categoria inexistente" });
+    }
 
-        let products = await db.product.findAll({
-            where: {
-                product_typeptid: id
-            }
-        })
+    let products = await db.product.findAll({
+      where: {
+        product_typeptid: id,
+      },
+    });
 
-		if (products.length === 0) return res.status(404).send({ success: 0, message: "Não existem produtos associados a esta categoria" });
+    if (products.length === 0)
+      return res.status(404).send({
+        success: 0,
+        message: "Não existem produtos associados a esta categoria",
+      });
 
-		let response = {
-			success: 1,
-			length: products.length,
-			results: products.map((product) => {
-				return {
-					id: product.prodid,
-					name: product.product_name,
-                    price: product.product_price,
-                    quantity: product.product_quantity,
-                    museum: product.museummid,
-                    type: product.product_typeptid,
-				};
-			}),
-		};
-		return res.status(200).send(response);
-	} catch (err) {
-		return res.status(500).send({ error: err, message: err.message });
-	}
+    let response = {
+      success: 1,
+      length: products.length,
+      results: products.map((product) => {
+        return {
+          id: product.prodid,
+          name: product.product_name,
+          price: product.product_price,
+          quantity: product.product_quantity,
+          museum: product.museummid,
+          type: product.product_typeptid,
+        };
+      }),
+    };
+    return res.status(200).send(response);
+  } catch (err) {
+    return res.status(500).send({ error: err, message: err.message });
+  }
 };
-
-
 
 exports.getProduct = async (req, res) => {
-	try {
-        let id = req.params.id;
-		let result = await db.product.findByPk(id);
+  try {
+    let id = req.params.id;
+    let result = await db.product.findByPk(id);
 
-        if(!result){
-            return res.status(404).send({ success: 0, message: "Produto inexistente" });
-        }
+    if (!result) {
+      return res
+        .status(404)
+        .send({ success: 0, message: "Produto inexistente" });
+    }
 
-        let response = {
-			success: 1,
-			results: {
-                id: result.prodid,
-                name: result.product_name,
-                price: result.product_price,
-                quantity: result.product_quantity,
-                museum: result.museummid,
-                type: result.product_typeptid,
-			}
-		};
+    let response = {
+      success: 1,
+      results: {
+        id: result.prodid,
+        name: result.product_name,
+        price: result.product_price,
+        quantity: result.product_quantity,
+        museum: result.museummid,
+        type: result.product_typeptid,
+      },
+    };
 
-		return res.status(200).send(response);
-	} catch (err) {
-		return res.status(500).send({ error: err, message: err.message });
-	}
+    return res.status(200).send(response);
+  } catch (err) {
+    return res.status(500).send({ error: err, message: err.message });
+  }
 };
-
 
 exports.addProduct = async (req, res) => {
-	try {
+  try {
+    let name = req.body.name;
+    let price = req.body.price;
+    let quantity = req.body.quantity; //verificar quantidade, começar a 0
+    let mid = req.body.museummid;
+    let type = req.body.type;
+    let idOwner = req.body.idOwner;
+    let idUserToken = req.user.id;
 
-		let name = req.body.name;
-		let price = req.body.price;
-		let quantity = req.body.quantity;   //verificar quantidade, começar a 0 
-		let mid = req.body.museummid;
-		let type = req.body.type;
-		let idOwner = req.body.idOwner;
-		let idUserToken = req.user.id;
+    let isManager = await utils.isManager(idUserToken); //Verificar, pode ser assim mas acho que fazia sentido ver se o utilizador esta ligado ao museu em questao
+    let isAdmin = await utils.isAdmin(idUserToken);
 
-		let isManager = await utils.isManager(idUserToken); //Verificar, pode ser assim mas acho que fazia sentido ver se o utilizador esta ligado ao museu em questao
-		let isAdmin = await utils.isAdmin(idUserToken);
+    if (!isManager && idOwner != idUserToken && isAdmin) {
+      return res.status(403).send({ success: 0, message: "Sem permissão" });
+    }
 
-		if (!isManager && idOwner != idUserToken && isAdmin) {
-			return res.status(403).send({ success: 0, message: "Sem permissão" });
-		}
-		
-		let user = await db.user.findByPk(idOwner);
-		if (!user) {
-			return res.status(404).send({ success: 0, message: "Utilizador inexistente" });
-		}
-		
-		//Verificaçao para entradas repetidas nas BD
+    let user = await db.user.findByPk(idOwner);
+    if (!user) {
+      return res
+        .status(404)
+        .send({ success: 0, message: "Utilizador inexistente" });
+    }
 
-        let newProduct = await db.product.create({
-			product_name: name,
-			product_price: price,
-			product_quantity: quantity,
-			museummid: mid,
-			product_typeptid: type,
-		});
+    //Verificaçao para entradas repetidas nas BD
 
-		let response = {
-			success: 1,
-			message: "Produto criado com sucesso",
-		};
+    let newProduct = await db.product.create({
+      product_name: name,
+      product_price: price,
+      product_quantity: quantity,
+      museummid: mid,
+      product_typeptid: type,
+    });
 
-		return res.status(200).send(response);
-	} catch (err) {
-		console.error("Error adding Product:", err);
-		return res.status(500).send({ error: err, message: err.message });
-	}
+    let response = {
+      success: 1,
+      message: "Produto criado com sucesso",
+    };
+
+    return res.status(200).send(response);
+  } catch (err) {
+    console.error("Error adding Product:", err);
+    return res.status(500).send({ error: err, message: err.message });
+  }
 };
-
 
 exports.editProduct = async (req, res) => {
-	try {
-		let id = req.params.id;
-		let idUserToken = req.user.id;
-		
-		let product = await db.product.findByPk(id);
+  try {
+    let id = req.params.id;
+    let idUserToken = req.user.id;
 
-		if (!product) {
-			return res.status(404).send({ success: 0, message: "Produto inexistente" });
-		}
+    let product = await db.product.findByPk(id);
 
-		let isManager = await utils.isManager(idUserToken); //Verificar
-		let isAdmin = await utils.isAdmin(idUserToken); //Verificar
+    if (!product) {
+      return res
+        .status(404)
+        .send({ success: 0, message: "Produto inexistente" });
+    }
 
-		if (!isManager && !isAdmin) {
-			return res.status(403).send({ success: 0, message: "Sem permissão" });
-		}
+    let isManager = await utils.isManager(idUserToken); //Verificar
+    let isAdmin = await utils.isAdmin(idUserToken); //Verificar
 
-		let { name, price, museummid, type} = req.body;
+    if (!isManager && !isAdmin) {
+      return res.status(403).send({ success: 0, message: "Sem permissão" });
+    }
 
-		if (name) product.product_name = name;
-		if (price) product.product_price = price; 
-		if (museummid) product.museummid = museummid; 
-		if (type) product.product_typeptid = type; 
-		//Colocar verificações
+    let { name, price, museummid, type } = req.body;
 
-		await product.save();
+    if (name) product.product_name = name;
+    if (price) product.product_price = price;
+    if (museummid) product.museummid = museummid;
+    if (type) product.product_typeptid = type;
+    //Colocar verificações
 
-		let response = {
-			success: 1,
-			message: "Produto editado com sucesso",
-		};
- 
-		return res.status(200).send(response);
-	} catch (err) {
-		console.error("Error editing Product:", err);
-		return res.status(500).send({ error: err, message: err.message });
-	}
+    await product.save();
+
+    let response = {
+      success: 1,
+      message: "Produto editado com sucesso",
+    };
+
+    return res.status(200).send(response);
+  } catch (err) {
+    console.error("Error editing Product:", err);
+    return res.status(500).send({ error: err, message: err.message });
+  }
 };
 
-
 exports.removeProduct = async (req, res) => {
-	try {
+  try {
+    let id = req.params.id;
+    let idUserToken = req.user.id;
 
-		let id = req.params.id;
-		let idUserToken = req.user.id;
+    const product = await db.product.findByPk(id);
 
-		const product = await db.product.findByPk(id);
+    if (!product) {
+      return res
+        .status(404)
+        .send({ success: 0, message: "Produto inexistente" });
+    }
 
-		if (!product) {
-			return res.status(404).send({ success: 0, message: "Produto inexistente" });
-		}
+    //let idOwner = artist.id_user; //ver se faz sentido
 
-		//let idOwner = artist.id_user; //ver se faz sentido
+    let isAdmin = await utils.isAdmin(idUserToken); //Verificar
 
-		let isAdmin = await utils.isAdmin(idUserToken); //Verificar
+    if (!isAdmin) {
+      return res.status(403).send({ success: 0, message: "Sem permissão" });
+    }
 
-		if (!isAdmin) {
-			return res.status(403).send({ success: 0, message: "Sem permissão" });
-		}
+    await product.destroy();
 
-		await product.destroy();
+    let response = {
+      success: 1,
+      message: "Produto removido com sucesso",
+    };
 
-		let response = {
-			success: 1,
-			message: "Produto removido com sucesso",
-		};
-
-		return res.status(200).send(response);
-	} catch (err) {
-		console.error("Error removing Product:", err);
-		return res.status(500).send({ error: err, message: err.message });
-	}
+    return res.status(200).send(response);
+  } catch (err) {
+    console.error("Error removing Product:", err);
+    return res.status(500).send({ error: err, message: err.message });
+  }
 };
