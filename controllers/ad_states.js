@@ -1,21 +1,20 @@
 const db = require("../config/mysql");
 const utils = require("../utils/index");
 
-exports.getCollections = async (req, res) => {
+exports.getAd_States = async (req, res) => {
   try {
-    //Verificar se é utilizador senão dar erro!
+    const ad_state = await db.ad_state.findAll();
 
-    let collection = await db.collection.findAll();
-
-    if (collection.length === 0) return res.status(404).send({ success: 0, message: "Não existem coleções" });
+    if (ad_state.length === 0) return res.status(404).send({ success: 0, message: "Não existem estados de anúncio" });
 
     let response = {
       success: 1,
-      length: collection.length,
-      results: collection.map((collection) => {
+      length: ad_state.length,
+      results: ad_state.map((ad_state) => {
         return {
-          id: collection.cid,
-          name: collection.collection_name,
+          id: ad_state.adstid,
+          description: ad_state.description,
+          adid: ad_state.adsadid,
         };
       }),
     };
@@ -26,7 +25,7 @@ exports.getCollections = async (req, res) => {
   }
 };
 
-exports.getCollection = async (req, res) => {
+exports.getAd_State = async (req, res) => {
   try {
     let id = req.params.id;
     /*
@@ -36,17 +35,17 @@ exports.getCollection = async (req, res) => {
     if (!isAdmin && id != idUserToken) return res.status(403).send({ success: 0, message: "Sem permissão" });
     */
 
-    let collection = await db.collection.findByPk(id);
+    let ad_state = await db.ad_state.findByPk(id);
 
-    if (!collection) return res.status(404).send({ success: 0, message: "Coleção inexistente" });
-
+    if (!ad_state) return res.status(404).send({ success: 0, message: "Estado de anúncio inexistente" });
     let response = {
       success: 1,
       length: 1,
       results: [
         {
-          id: collection.cid,
-          collection: collection.collection_name,
+          id: ad_state.adstid,
+          description: ad_state.description,
+          adid: ad_state.adsadid,
         },
       ],
     };
@@ -57,9 +56,9 @@ exports.getCollection = async (req, res) => {
   }
 };
 
-exports.addCollection = async (req, res) => {
+exports.addAd_State = async (req, res) => {
   try {
-    let name = req.body.name;
+    let { description, adid } = req.body;
 
     /*
     let isAdmin = await utils.isAdmin(idUserToken); //Verificar
@@ -73,71 +72,69 @@ exports.addCollection = async (req, res) => {
     }
     */
 
-    let newCollection = await db.collection.create({
-      collection_name: name,
+    let newAd_state = await db.ad_state.create({
+      description: description,
+      adsadid: adid,
     });
 
     let response = {
       success: 1,
-      message: "Coleção criada com sucesso",
+      message: "Estado de anúncio criado com sucesso",
     };
 
     return res.status(200).send(response);
   } catch (err) {
-    console.error("Error adding collection:", err);
+    console.error("Error adding ad state:", err);
     return res.status(500).send({ error: err, message: err.message });
   }
 };
 
-exports.editCollection = async (req, res) => {
+exports.editAd_State = async (req, res) => {
   try {
     let id = req.params.id;
     let idUserToken = req.user.id;
+    let { description, adid } = req.body;
 
-    let collection = await db.collection.findByPk(id);
+    let ad_state = await db.ad_state.findByPk(id);
 
-    console.log(collection);
-
-    if (!collection) {
-      return res.status(404).send({ success: 0, message: "Coleção inexistente" });
+    if (!ad_state) {
+      return res.status(404).send({ success: 0, message: "Estado de anúncio inexistente" });
     }
 
     /*
-    let idOwner = artist.id_user;
+      let idOwner = artist.id_user;
+  
+      let isAdmin = await utils.isAdmin(idUserToken); //Verificar
+      if (!isAdmin && idOwner != idUserToken) {
+        return res.status(403).send({ success: 0, message: "Sem permissão" });
+      }
+      */
+    if (description) ad_state.description = description;
+    if (adid) ad_state.adsadid = adid;
 
-    let isAdmin = await utils.isAdmin(idUserToken); //Verificar
-    if (!isAdmin && idOwner != idUserToken) {
-      return res.status(403).send({ success: 0, message: "Sem permissão" });
-    }
-    */
-
-    let { name } = req.body;
-
-    if (name) collection.collection_name = name;
-
-    await collection.save();
+    await ad_state.save();
 
     let response = {
       success: 1,
-      message: "Coleção editado com sucesso",
+      message: "Estado de anúncio editado com sucesso",
     };
 
     return res.status(200).send(response);
   } catch (err) {
-    console.error("Error editing collection:", err);
+    console.error("Error editing ad state:", err);
     return res.status(500).send({ error: err, message: err.message });
   }
 };
 
-exports.removeCollection = async (req, res) => {
+exports.removeAd_State = async (req, res) => {
   try {
     let id = req.params.id;
     let idUserToken = req.user.id;
 
-    const collection = await db.collection.findByPk(id);
+    const ad_state = await db.ad_state.findByPk(id);
 
-    if (!collection) {
-      return res.status(404).send({ success: 0, message: "Coleção inexistente" });
+    if (!ad_state) {
+      return res.status(404).send({ success: 0, message: "Estado de anúncio inexistente" });
     }
 
     let isAdmin = await utils.isAdmin(idUserToken); //Verificar
@@ -145,16 +142,16 @@ exports.removeCollection = async (req, res) => {
       return res.status(403).send({ success: 0, message: "Sem permissão" });
     }
 
-    await collection.destroy();
+    await ad_state.destroy();
 
     let response = {
       success: 1,
-      message: "Coleção removido com sucesso",
+      message: "Estado de anúncio removido com sucesso",
     };
 
     return res.status(200).send(response);
   } catch (err) {
-    console.error("Error removing collection:", err);
+    console.error("Error removing ad state:", err);
     return res.status(500).send({ error: err, message: err.message });
   }
 };

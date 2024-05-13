@@ -1,6 +1,4 @@
-const event = require("../models/event");
 const utils = require("../utils/index");
-const user = require("../models/user");
 const db = require("../config/mysql");
 
 exports.getEvents = async (req, res) => {
@@ -67,11 +65,7 @@ exports.getEvent = async (req, res) => {
 
 exports.addEvent = async (req, res) => {
   try {
-    let start_date = req.body.start_date;
-    let end_date = req.body.end_date;
-    let type = req.body.type;
-    let museum = req.body.museum;
-    let status = req.body.status;
+    let { start_date, end_date, type, museum, status } = req.body;
 
     /*
       let isAdmin = await utils.isAdmin(idUserToken); //Verificar
@@ -84,11 +78,10 @@ exports.addEvent = async (req, res) => {
         return res.status(404).send({ success: 0, message: "Utilizador inexistente" });
       }
       */
-
     let newEvent = await db.event.create({
       event_start_date: start_date,
       event_end_date: end_date,
-      event_typeeid: type,
+      event_typeetid: type,
       museummid: museum,
       event_statuses_id: status,
     });
@@ -109,6 +102,7 @@ exports.editEvent = async (req, res) => {
   try {
     let id = req.params.id;
     let idUserToken = req.user.id;
+    let { start_date, end_date, type, museum, status } = req.body;
 
     let event = await db.event.findByPk(id);
 
@@ -127,7 +121,12 @@ exports.editEvent = async (req, res) => {
 
     let { eid } = req.body;
 
-    if (eid) collection.eid = eid;
+    if (eid) event.eid = eid;
+    if (start_date) event.event_start_date = start_date;
+    if (end_date) event.event_end_date = end_date;
+    if (type) event.event_typeeid = type;
+    if (museum) event.museummid = museum;
+    if (status) event.event_statuses_id = status;
 
     await event.save();
 
