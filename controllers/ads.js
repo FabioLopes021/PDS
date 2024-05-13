@@ -1,6 +1,7 @@
 const db = require("../config/mysql");
 const utils = require("../utils/index");
 
+//Teste
 exports.getAds = async (req, res) => {
     try {
       const ad = await db.ad.findAll();
