@@ -5,7 +5,7 @@ exports.getAds = async (req, res) => {
     try {
       const ad = await db.ad.findAll();
   
-      if (artists.length === 0) return res.status(404).send({ success: 0, message: "Não existem anúncios" });
+      if (ad.length === 0) return res.status(404).send({ success: 0, message: "Não existem anúncios" });
   
       let response = {
         success: 1,
