@@ -12,13 +12,13 @@ module.exports = function(sequelize, DataTypes) {
     useruid: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      primaryKey: true,
       references: {
         model: 'user',
         key: 'uid'
       }
     },
     eventeid: {
-      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,

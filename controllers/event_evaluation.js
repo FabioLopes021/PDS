@@ -4,7 +4,6 @@ const event_evaluation = require("../models/event_evaluation");
 const user = require("../models/user");
 const event_status = require("../models/event_status");
 
-
 exports.getEvents_Eval = async (req, res) => {
   try {
     let event_evaluation = await db.event_evaluation.findAll();
@@ -19,7 +18,7 @@ exports.getEvents_Eval = async (req, res) => {
           id: event_evaluation.eventeid,
           description: event_evaluation.ee_description,
           evaluation: event_evaluation.ee_evaluation,
-          user_id: event_evaluation.useruid ,
+          user_id: event_evaluation.useruid,
         };
       }),
     };
@@ -52,7 +51,7 @@ exports.getEvent_Eval = async (req, res) => {
           id: event_evaluation.eventeid,
           description: event_evaluation.ee_description,
           evaluation: event_evaluation.ee_evaluation,
-          user_id: event_evaluation.useruid ,
+          user_id: event_evaluation.useruid,
         },
       ],
     };
@@ -65,7 +64,7 @@ exports.getEvent_Eval = async (req, res) => {
 
 exports.addEvents_Eval = async (req, res) => {
   try {
-    let {  description, evaluation, user_id } = req.body;
+    let { description, evaluation, user_id } = req.body;
 
     /*
       let isAdmin = await utils.isAdmin(idUserToken); //Verificar
