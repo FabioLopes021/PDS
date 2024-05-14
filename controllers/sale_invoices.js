@@ -2,21 +2,21 @@ const { where } = require("sequelize");
 const db = require("../config/mysql");
 const utils = require("../utils/index");
 
-exports.getAllPurchases = async (req, res) => {
+exports.getAllSales = async (req, res) => {
   try {
-      let purchases = await db.purchase_invoice.findAll();
+      let sales = await db.sale_invoice.findAll();
 
-      if (purchases.length === 0)
-        return res.status(404).send({ success: 0, message: "Não existem compras registadas" });
+      if (sales.length === 0)
+        return res.status(404).send({ success: 0, message: "Não existem vendas registadas" });
 
       let response = {
         success: 1,
-        length: purchases.length,
-        results: purchases.map((purchase_invoice) => {
+        length: sales.length,
+        results: sales.map((sale_invoice) => {
           return {
-            id: purchase_invoice.purchase_invoiceid,
-            date: purchase_invoice.purchase_entry_date,
-            museum_id: purchase_invoice.museummid,
+            id: sale_invoice.sale_invoiceid,
+            date: sale_invoice.invoice_departure_date,
+            user_id: sale_invoice.useruid,
           };
         }),
       };
@@ -27,26 +27,26 @@ exports.getAllPurchases = async (req, res) => {
 };
 
 
-exports.getPurchasesByMuseum = async (req, res) => {
+exports.getSalesByUser = async (req, res) => {
     try {
         let id = req.params.id;
-        let purchases = await db.purchase_invoice.findAll({
+        let sales = await db.sale_invoice.findAll({
             where:{
-                museummid: id,
+                useruid: id,
             },
         });
   
-        if (purchases.length === 0)
-            return res.status(404).send({ success: 0, message: "Não existem compras registadas relativas e esse museu" });
+        if (sales.length === 0)
+            return res.status(404).send({ success: 0, message: "Não existem vendas registadas relativas e esse utilizador" });
   
         let response = {
             success: 1,
-            length: purchases.length,
-            results: purchases.map((purchase_invoice) => {
+            length: sales.length,
+            results: sales.map((sale_invoice) => {
             return {
-                id: purchase_invoice.purchase_invoiceid,
-                date: purchase_invoice.purchase_entry_date,
-                museum_id: purchase_invoice.museummid,
+                id: sale_invoice.sale_invoiceid,
+                date: sale_invoice.invoice_departure_date,
+                user_id: sale_invoice.useruid,
             };
             }),
         };
@@ -57,23 +57,23 @@ exports.getPurchasesByMuseum = async (req, res) => {
     };
 
 
-exports.getPurchase = async (req, res) => {
+exports.getSale = async (req, res) => {
   try {
     let id = req.params.id;
-    let result = await db.purchase_invoice.findByPk(id);
+    let result = await db.sale_invoice.findByPk(id);
 
     if (!result) {
       return res
         .status(404)
-        .send({ success: 0, message: "Registos de compras inexistente" });
+        .send({ success: 0, message: "Registos de venda inexistente" });
     }
 
     let response = {    
       success: 1,
       results: {
-        id: result.purchase_invoiceid,
-        date: result.purchase_entry_date,
-        museum_id: result.museummid,
+        id: result.sale_invoiceid,
+        date: result.invoice_departure_date,
+        user_id: result.useruid,
       },
     };
 
@@ -83,10 +83,10 @@ exports.getPurchase = async (req, res) => {
   }
 };
 
-exports.addPurchase = async (req, res) => {
+exports.addSale = async (req, res) => {
   try {
     let date = req.body.date;
-    let museumid = req.body.museum_id;
+    let userid = req.body.user_id;
     let idOwner = req.body.id;
     let idUserToken = req.user.id;
 
@@ -106,34 +106,34 @@ exports.addPurchase = async (req, res) => {
 
     //Verificaçao para entradas repetidas nas BD
 
-    let newPurchaseInvoice = await db.purchase_invoice.create({
-      purchase_entry_date: date,
-      museummid: museumid,
+    let newSaleInvoice = await db.sale_invoice.create({
+        invoice_departure_date: date,
+        useruid: userid,
     });
 
     let response = {
       success: 1,
-      message: "Compra registada com sucesso",
+      message: "Venda registada com sucesso",
     };
 
     return res.status(200).send(response);
   } catch (err) {
-    console.error("Error adding Purchase Invoice:", err);
+    console.error("Error adding sale Invoice:", err);
     return res.status(500).send({ error: err, message: err.message });
   }
 };
 
-exports.editPurchase = async (req, res) => {
+exports.editSale = async (req, res) => {
   try {
     let id = req.params.id;
     let idUserToken = req.user.id;
 
-    let purchase = await db.purchase_invoice.findByPk(id);
+    let sale = await db.sale_invoice.findByPk(id);
 
-    if (!purchase) {
+    if (!sale) {
       return res
         .status(404)
-        .send({ success: 0, message: "Registo de compra inexistente" });
+        .send({ success: 0, message: "Registo de venda inexistente" });
     }
 
     let isManager = await utils.isManager(idUserToken); //Verificar
@@ -143,37 +143,37 @@ exports.editPurchase = async (req, res) => {
       return res.status(403).send({ success: 0, message: "Sem permissão" });
     }
 
-    let { date , museum_id } = req.body;
+    let { date , user_id } = req.body;
 
-    if (date) purchase.purchase_entry_date = date;
-    if (museum_id) purchase.museummid = museum_id;
+    if (date) sale.invoice_departure_date = date;
+    if (museum_id) sale.useruid = museum_id;
     
 
-    await purchase.save();
+    await sale.save();
 
     let response = {
       success: 1,
-      message: "Registo de compra editado com sucesso",
+      message: "Registo de venda editado com sucesso",
     };
 
     return res.status(200).send(response);
   } catch (err) {
-    console.error("Error editing purchase invoice:", err);
+    console.error("Error editing sale invoice:", err);
     return res.status(500).send({ error: err, message: err.message });
   }
 };
 
-exports.removePurchase = async (req, res) => {
+exports.removeSale = async (req, res) => {
   try {
     let id = req.params.id;
     let idUserToken = req.user.id;
 
-    const purchase = await db.purchase_invoice.findByPk(id);
+    const sale = await db.sale_invoice.findByPk(id);
 
-    if (!purchase) {
+    if (!sale) {
       return res
         .status(404)
-        .send({ success: 0, message: "Registo de compra inexistente" });
+        .send({ success: 0, message: "Registo de venda inexistente" });
     }
 
     //let idOwner = artist.id_user; //ver se faz sentido
@@ -186,16 +186,16 @@ exports.removePurchase = async (req, res) => {
 
     //Antes verificar se esta atribuido a algum produto, se sim nao permitir
 
-    await purchase.destroy();
+    await sale.destroy();
 
     let response = {
       success: 1,
-      message: "Registo de compra removido com sucesso",
+      message: "Registo de venda removido com sucesso",
     };
 
     return res.status(200).send(response);
   } catch (err) {
-    console.error("Error removing purchase invoice:", err);
+    console.error("Error removing sale invoice:", err);
     return res.status(500).send({ error: err, message: err.message });
   }
 };

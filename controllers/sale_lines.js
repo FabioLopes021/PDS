@@ -2,21 +2,22 @@ const { where } = require("sequelize");
 const db = require("../config/mysql");
 const utils = require("../utils/index");
 
-exports.getAllPurchases = async (req, res) => {
+exports.getAllSaleLines = async (req, res) => {
   try {
-      let purchases = await db.purchase_invoice.findAll();
+      let saleLines = await db.sale_line.findAll();
 
-      if (purchases.length === 0)
-        return res.status(404).send({ success: 0, message: "Não existem compras registadas" });
+      if (saleLines.length === 0)
+        return res.status(404).send({ success: 0, message: "Não existe nenhuma linha registada" });
 
       let response = {
         success: 1,
-        length: purchases.length,
-        results: purchases.map((purchase_invoice) => {
+        length: saleLines.length,
+        results: saleLines.map((sale_line) => {
           return {
-            id: purchase_invoice.purchase_invoiceid,
-            date: purchase_invoice.purchase_entry_date,
-            museum_id: purchase_invoice.museummid,
+            id: sale_line.sale_lid,
+            quantity: sale_line.line_quantity,
+            saleInvoiceId: sale_line.sale_invoicesale_invoiceid,
+            productId: sale_line.productprodid,
           };
         }),
       };
@@ -27,26 +28,27 @@ exports.getAllPurchases = async (req, res) => {
 };
 
 
-exports.getPurchasesByMuseum = async (req, res) => {
+exports.getLinesBySale = async (req, res) => {
     try {
         let id = req.params.id;
-        let purchases = await db.purchase_invoice.findAll({
+        let lines = await db.sale_line.findAll({
             where:{
-                museummid: id,
+                sale_invoicesale_invoiceid: id,
             },
         });
   
-        if (purchases.length === 0)
-            return res.status(404).send({ success: 0, message: "Não existem compras registadas relativas e esse museu" });
+        if (lines.length === 0)
+            return res.status(404).send({ success: 0, message: "Não existem linhas registadas relativas e essa venda" });
   
         let response = {
             success: 1,
-            length: purchases.length,
-            results: purchases.map((purchase_invoice) => {
+            length: lines.length,
+            results: lines.map((sale_line) => {
             return {
-                id: purchase_invoice.purchase_invoiceid,
-                date: purchase_invoice.purchase_entry_date,
-                museum_id: purchase_invoice.museummid,
+                id: sale_line.sale_lid,
+                quantity: sale_line.line_quantity,
+                saleInvoiceId: sale_line.sale_invoicesale_invoiceid,
+                productId: sale_line.productprodid,
             };
             }),
         };
@@ -57,23 +59,24 @@ exports.getPurchasesByMuseum = async (req, res) => {
     };
 
 
-exports.getPurchase = async (req, res) => {
+exports.getSaleLine = async (req, res) => {
   try {
     let id = req.params.id;
-    let result = await db.purchase_invoice.findByPk(id);
+    let result = await db.sale_line.findByPk(id);
 
     if (!result) {
       return res
         .status(404)
-        .send({ success: 0, message: "Registos de compras inexistente" });
+        .send({ success: 0, message: "Linha de venda inexistente" });
     }
 
     let response = {    
       success: 1,
       results: {
-        id: result.purchase_invoiceid,
-        date: result.purchase_entry_date,
-        museum_id: result.museummid,
+        id: result.sale_lid,
+        quantity: result.line_quantity,
+        saleInvoiceId: result.sale_invoicesale_invoiceid,
+        productId: result.productprodid,
       },
     };
 
@@ -83,10 +86,11 @@ exports.getPurchase = async (req, res) => {
   }
 };
 
-exports.addPurchase = async (req, res) => {
+exports.addSaleLine = async (req, res) => {
   try {
-    let date = req.body.date;
-    let museumid = req.body.museum_id;
+    let quantity = req.body.quantity;
+    let saleId = req.body.saleInvoiceId;
+    let prodId = req.body.productId;
     let idOwner = req.body.id;
     let idUserToken = req.user.id;
 
@@ -105,35 +109,37 @@ exports.addPurchase = async (req, res) => {
     }
 
     //Verificaçao para entradas repetidas nas BD
-
-    let newPurchaseInvoice = await db.purchase_invoice.create({
-      purchase_entry_date: date,
-      museummid: museumid,
+    
+    let newSaleLine = await db.sale_line.create({
+        line_quantity: quantity,
+        sale_invoicesale_invoiceid: saleId,
+        productprodid: prodId,
     });
 
     let response = {
       success: 1,
-      message: "Compra registada com sucesso",
+      message: "linha de venda registada com sucesso",
     };
 
     return res.status(200).send(response);
   } catch (err) {
-    console.error("Error adding Purchase Invoice:", err);
+    console.error("Error adding sale Line:", err);
     return res.status(500).send({ error: err, message: err.message });
   }
 };
 
-exports.editPurchase = async (req, res) => {
+
+exports.editSaleLine = async (req, res) => {
   try {
     let id = req.params.id;
     let idUserToken = req.user.id;
 
-    let purchase = await db.purchase_invoice.findByPk(id);
+    let saleLine = await db.sale_line.findByPk(id);
 
-    if (!purchase) {
+    if (!saleLine) {
       return res
         .status(404)
-        .send({ success: 0, message: "Registo de compra inexistente" });
+        .send({ success: 0, message: "Linha de venda inexistente" });
     }
 
     let isManager = await utils.isManager(idUserToken); //Verificar
@@ -143,37 +149,38 @@ exports.editPurchase = async (req, res) => {
       return res.status(403).send({ success: 0, message: "Sem permissão" });
     }
 
-    let { date , museum_id } = req.body;
+    let { quantity , saleId, prodId } = req.body;
 
-    if (date) purchase.purchase_entry_date = date;
-    if (museum_id) purchase.museummid = museum_id;
+    if (quantity) saleLine.line_quantity = quantity;
+    if (saleId) saleLine.sale_invoicesale_invoiceid = saleId;
+    if (prodId) saleLine.productprodid = prodId;
     
 
-    await purchase.save();
+    await saleLine.save();
 
     let response = {
       success: 1,
-      message: "Registo de compra editado com sucesso",
+      message: "Linha de venda editada com sucesso",
     };
 
     return res.status(200).send(response);
   } catch (err) {
-    console.error("Error editing purchase invoice:", err);
+    console.error("Error editing sale line:", err);
     return res.status(500).send({ error: err, message: err.message });
   }
 };
 
-exports.removePurchase = async (req, res) => {
+exports.removeSaleLine = async (req, res) => {
   try {
     let id = req.params.id;
     let idUserToken = req.user.id;
 
-    const purchase = await db.purchase_invoice.findByPk(id);
+    const saleLine = await db.sale_line.findByPk(id);
 
-    if (!purchase) {
+    if (!saleLine) {
       return res
         .status(404)
-        .send({ success: 0, message: "Registo de compra inexistente" });
+        .send({ success: 0, message: "Linha de venda inexistente" });
     }
 
     //let idOwner = artist.id_user; //ver se faz sentido
@@ -186,16 +193,16 @@ exports.removePurchase = async (req, res) => {
 
     //Antes verificar se esta atribuido a algum produto, se sim nao permitir
 
-    await purchase.destroy();
+    await saleLine.destroy();
 
     let response = {
       success: 1,
-      message: "Registo de compra removido com sucesso",
+      message: "Linha de venda removida com sucesso",
     };
 
     return res.status(200).send(response);
   } catch (err) {
-    console.error("Error removing purchase invoice:", err);
+    console.error("Error removing sale line:", err);
     return res.status(500).send({ error: err, message: err.message });
   }
 };
