@@ -65,12 +65,15 @@ exports.addAd_State = async (req, res) => {
     if (!isAdmin && idOwner != idUserToken) {
       return res.status(403).send({ success: 0, message: "Sem permissão" });
     }
-
-    let user = await db.user.findByPk(idOwner);
-    if (!user) {
-      return res.status(404).send({ success: 0, message: "Utilizador inexistente" });
-    }
     */
+
+    let ad_id = await db.ad.findByPk(adid);
+    if (!ad) {
+      return res.status(404).send({ success: 0, message: "O anúncio que está tentar associar não existe inexistente" });
+    }
+    
+
+    
 
     let newAd_state = await db.ad_state.create({
       description: description,

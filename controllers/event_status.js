@@ -132,7 +132,6 @@ exports.removeEvent_Status = async (req, res) => {
     let idUserToken = req.user.id;
 
     const event_status = await db.event_status.findByPk(id);
-
     if (!event_status) {
       return res.status(404).send({ success: 0, message: "Estado de evento inexistente" });
     }

@@ -67,12 +67,16 @@ exports.addAd = async (req, res) => {
     if (!isAdmin && idOwner != idUserToken) {
       return res.status(403).send({ success: 0, message: "Sem permissão" });
     }
-
-    let user = await db.user.findByPk(idOwner);
+    */
+    let user = await db.user.findByPk(user_id);
     if (!user) {
       return res.status(404).send({ success: 0, message: "Utilizador inexistente" });
     }
-    */
+
+    let piece = await db.piece.findByPk(piece_id);
+    if(!piece){
+      return res.status(404).send({ success: 0, message: "Peça inexistente" });
+    }
 
     let newAd = await db.ad.create({
       useruid: user_id,

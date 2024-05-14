@@ -1,9 +1,11 @@
 const utils = require("../utils/index");
 const db = require("../config/mysql");
+const event_evaluation = require("../models/event_evaluation");
+const user = require("../models/user");
+const event_status = require("../models/event_status");
 
-// MUDAR TUDO
 
-exports.getEvent_Evaluations = async (req, res) => {
+exports.getEvents_Eval = async (req, res) => {
   try {
     let event_evaluation = await db.event_evaluation.findAll();
 
@@ -14,12 +16,10 @@ exports.getEvent_Evaluations = async (req, res) => {
       length: event_evaluation.length,
       results: event_evaluation.map((event_evaluation) => {
         return {
-          id: event_evaluation.eid,
-          start_date: event_evaluation.event_start_date,
-          end_date: event_evaluation.event_end_date,
-          type: event_evaluation.event_typeeid,
-          museum: event_evaluation.museummid,
-          status: event_evaluation.event_statuses_id,
+          id: event_evaluation.eventeid,
+          description: event_evaluation.ee_description,
+          evaluation: event_evaluation.ee_evaluation,
+          user_id: event_evaluation.useruid ,
         };
       }),
     };
@@ -30,7 +30,7 @@ exports.getEvent_Evaluations = async (req, res) => {
   }
 };
 
-exports.getEvent = async (req, res) => {
+exports.getEvent_Eval = async (req, res) => {
   try {
     let id = req.params.id;
     /*
@@ -49,12 +49,10 @@ exports.getEvent = async (req, res) => {
       length: 1,
       results: [
         {
-          id: event.eid,
-          start_date: event.event_start_date,
-          end_date: event.event_end_date,
-          type: event.event_typeeid,
-          museum: event.museummid,
-          status: event.event_statuses_id,
+          id: event_evaluation.eventeid,
+          description: event_evaluation.ee_description,
+          evaluation: event_evaluation.ee_evaluation,
+          user_id: event_evaluation.useruid ,
         },
       ],
     };
@@ -65,9 +63,9 @@ exports.getEvent = async (req, res) => {
   }
 };
 
-exports.addEvent = async (req, res) => {
+exports.addEvents_Eval = async (req, res) => {
   try {
-    let { start_date, end_date, type, museum, status } = req.body;
+    let {  description, evaluation, user_id } = req.body;
 
     /*
       let isAdmin = await utils.isAdmin(idUserToken); //Verificar
@@ -80,36 +78,39 @@ exports.addEvent = async (req, res) => {
         return res.status(404).send({ success: 0, message: "Utilizador inexistente" });
       }
       */
-    let newEvent = await db.event.create({
-      event_start_date: start_date,
-      event_end_date: end_date,
-      event_typeetid: type,
-      museummid: museum,
-      event_statuses_id: status,
+    let newEvent_Eval = await db.event_evaluation.create({
+      ee_description: description,
+      ee_evaluation: evaluation,
+      useruid: user_id,
     });
 
     let response = {
       success: 1,
-      message: "Evento criado com sucesso",
+      message: "Avaliação de evento criada com sucesso",
     };
 
     return res.status(200).send(response);
   } catch (err) {
-    console.error("Error adding event:", err);
+    console.error("Error adding event evaluation:", err);
     return res.status(500).send({ error: err, message: err.message });
   }
 };
 
-exports.editEvent = async (req, res) => {
+exports.editEvents_Eval = async (req, res) => {
   try {
     let id = req.params.id;
     let idUserToken = req.user.id;
-    let { start_date, end_date, type, museum, status } = req.body;
+    let { description, evaluation, user_id } = req.body;
 
-    let event = await db.event.findByPk(id);
+    let event_evaluation = await db.event_evaluation.findByPk(id);
 
-    if (!event) {
-      return res.status(404).send({ success: 0, message: "Evento inexistente" });
+    if (!event_evaluation) {
+      return res.status(404).send({ success: 0, message: "Avaliação de evento inexistente" });
+    }
+
+    let user = await db.user.findByPk(idUserToken);
+    if (!user) {
+      return res.status(404).send({ success: 0, message: "Utilizador inexistente" });
     }
 
     /*
@@ -121,38 +122,33 @@ exports.editEvent = async (req, res) => {
       }
       */
 
-    let { eid } = req.body;
+    if (id) event_evaluation.eventeeid = id;
+    if (description) event_evaluation.ee_description = description;
+    if (evaluation) event_evaluation.ee_evaluation = evaluation;
+    if (user_id) event_evaluation.useruid = user_id;
 
-    if (eid) event.eid = eid;
-    if (start_date) event.event_start_date = start_date;
-    if (end_date) event.event_end_date = end_date;
-    if (type) event.event_typeeid = type;
-    if (museum) event.museummid = museum;
-    if (status) event.event_statuses_id = status;
-
-    await event.save();
+    await event_evaluation.save();
 
     let response = {
       success: 1,
-      message: "Evento editado com sucesso",
+      message: "Avaliação de evento editada com sucesso",
     };
 
     return res.status(200).send(response);
   } catch (err) {
-    console.error("Error editing event:", err);
+    console.error("Error editing event evaluation:", err);
     return res.status(500).send({ error: err, message: err.message });
   }
 };
 
-exports.removeEvent = async (req, res) => {
+exports.removeEvents_Eval = async (req, res) => {
   try {
     let id = req.params.id;
     let idUserToken = req.user.id;
+    const event_evaluation = await db.event_evaluation.findByPk(id);
 
-    const event = await db.event.findByPk(id);
-
-    if (!event) {
-      return res.status(404).send({ success: 0, message: "Evento inexistente" });
+    if (!event_evaluation) {
+      return res.status(404).send({ success: 0, message: "Avaliação inexistente" });
     }
 
     let isAdmin = await utils.isAdmin(idUserToken); //Verificar
@@ -160,16 +156,16 @@ exports.removeEvent = async (req, res) => {
       return res.status(403).send({ success: 0, message: "Sem permissão" });
     }
 
-    await event.destroy();
+    await event_evaluation.destroy();
 
     let response = {
       success: 1,
-      message: "Evento removido com sucesso",
+      message: "Avaliação de evento removida com sucesso",
     };
 
     return res.status(200).send(response);
   } catch (err) {
-    console.error("Error removing event:", err);
+    console.error("Error removing event evaluation:", err);
     return res.status(500).send({ error: err, message: err.message });
   }
 };
