@@ -1,7 +1,7 @@
 const db = require("../config/mysql");
 const utils = require("../utils/index");
 
-exports.getEvent_Types = async (req, res) => {
+exports.getEventTypes = async (req, res) => {
   try {
     let event_type = await db.event_type.findAll();
 
@@ -24,7 +24,7 @@ exports.getEvent_Types = async (req, res) => {
   }
 };
 
-exports.getEvent_Type = async (req, res) => {
+exports.getEventType = async (req, res) => {
   try {
     let id = req.params.id;
     /*
@@ -55,7 +55,7 @@ exports.getEvent_Type = async (req, res) => {
   }
 };
 
-exports.addEvent_Type = async (req, res) => {
+exports.addEventType = async (req, res) => {
   try {
     let { description } = req.body;
 
@@ -70,7 +70,7 @@ exports.addEvent_Type = async (req, res) => {
           return res.status(404).send({ success: 0, message: "Utilizador inexistente" });
         }
         */
-    let newEvent_Type = await db.event_type.create({
+    let newEventType = await db.event_type.create({
       et_description: description,
     });
 
@@ -86,7 +86,7 @@ exports.addEvent_Type = async (req, res) => {
   }
 };
 
-exports.editEvent_Type = async (req, res) => {
+exports.editEventType = async (req, res) => {
   try {
     let id = req.params.id;
     let idUserToken = req.user.id;
@@ -126,7 +126,7 @@ exports.editEvent_Type = async (req, res) => {
   }
 };
 
-exports.removeEvent_Type = async (req, res) => {
+exports.removeEventType = async (req, res) => {
   try {
     let id = req.params.id;
     let idUserToken = req.user.id;

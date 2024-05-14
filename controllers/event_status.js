@@ -1,7 +1,7 @@
 const db = require("../config/mysql");
 const utils = require("../utils/index");
 
-exports.getEvents_Status = async (req, res) => {
+exports.getEventsStatus = async (req, res) => {
   try {
     let event_status = await db.event_status.findAll();
 
@@ -24,7 +24,7 @@ exports.getEvents_Status = async (req, res) => {
   }
 };
 
-exports.getEvent_Status = async (req, res) => {
+exports.getEventStatus = async (req, res) => {
   try {
     let id = req.params.id;
     /*
@@ -55,7 +55,7 @@ exports.getEvent_Status = async (req, res) => {
   }
 };
 
-exports.addEvent_Status = async (req, res) => {
+exports.addEventStatus = async (req, res) => {
   try {
     let { description } = req.body;
 
@@ -70,7 +70,7 @@ exports.addEvent_Status = async (req, res) => {
           return res.status(404).send({ success: 0, message: "Utilizador inexistente" });
         }
         */
-    let newEvent_Status = await db.event_status.create({
+    let newEventStatus = await db.event_status.create({
       es_description: description,
     });
 
@@ -86,7 +86,7 @@ exports.addEvent_Status = async (req, res) => {
   }
 };
 
-exports.editEvent_Status = async (req, res) => {
+exports.editEventStatus = async (req, res) => {
   try {
     let id = req.params.id;
     let idUserToken = req.user.id;
@@ -126,7 +126,7 @@ exports.editEvent_Status = async (req, res) => {
   }
 };
 
-exports.removeEvent_Status = async (req, res) => {
+exports.removeEventStatus = async (req, res) => {
   try {
     let id = req.params.id;
     let idUserToken = req.user.id;

@@ -1,7 +1,7 @@
 const utils = require("../utils/index");
 const db = require("../config/mysql");
 
-exports.getMuseum_Evaluations = async (req, res) => {
+exports.getMuseumEvaluations = async (req, res) => {
   try {
     let museum_evaluations = await db.museum_evaluation.findAll();
 
@@ -24,7 +24,7 @@ exports.getMuseum_Evaluations = async (req, res) => {
   }
 };
 
-exports.getMuseum_Evaluation = async (req, res) => {
+exports.getMuseumEvaluation = async (req, res) => {
   try {
     let id = req.params.id;
 
@@ -49,7 +49,7 @@ exports.getMuseum_Evaluation = async (req, res) => {
   }
 };
 
-exports.addMuseum_Evaluation = async (req, res) => {
+exports.addMuseumEvaluation = async (req, res) => {
   try {
     let { description, evaluation, museumId, userId } = req.body;
 
@@ -72,7 +72,7 @@ exports.addMuseum_Evaluation = async (req, res) => {
   }
 };
 
-exports.editMuseum_Evaluation = async (req, res) => {
+exports.editMuseumEvaluation = async (req, res) => {
   try {
     let id = req.params.id;
     let { description, evaluation } = req.body;
@@ -100,7 +100,7 @@ exports.editMuseum_Evaluation = async (req, res) => {
   }
 };
 
-exports.removeMuseum_Evaluation = async (req, res) => {
+exports.removeMuseumEvaluation = async (req, res) => {
   try {
     let id = req.params.id;
 

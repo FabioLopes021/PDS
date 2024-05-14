@@ -7,14 +7,14 @@ const utils = require("../utils");
 const user = require("../models/user");
 
 // List all ad states
-router.get("/ad_states", ad_statesController.getAd_States);
+router.get("/ad_states", ad_statesController.getAdStates);
 // List specific ad state
-router.get("/ad_states/:id", ad_statesController.getAd_State);
+router.get("/ad_states/:id", ad_statesController.getAdState);
 // Add ad state
-router.post("/ad_states/add", login.required, ad_statesController.addAd_State);
+router.post("/ad_states/add", login.required, ad_statesController.addAdState);
 // Edit ad
-router.put("/ad_states/edit/:id", login.required, ad_statesController.editAd_State);
+router.put("/ad_states/edit/:id", login.required, ad_statesController.editAdState);
 // Remove ad
-router.delete("/ad_states/remove/:id", login.required, ad_statesController.removeAd_State);
+router.delete("/ad_states/remove/:id", login.required, ad_statesController.removeAdState);
 
 module.exports = router;

@@ -1,7 +1,7 @@
 const db = require("../config/mysql");
 const utils = require("../utils/index");
 
-exports.getAd_States = async (req, res) => {
+exports.getAdStates = async (req, res) => {
   try {
     const ad_state = await db.ad_state.findAll();
 
@@ -25,7 +25,7 @@ exports.getAd_States = async (req, res) => {
   }
 };
 
-exports.getAd_State = async (req, res) => {
+exports.getAdState = async (req, res) => {
   try {
     let id = req.params.id;
     /*
@@ -56,7 +56,7 @@ exports.getAd_State = async (req, res) => {
   }
 };
 
-exports.addAd_State = async (req, res) => {
+exports.addAdState = async (req, res) => {
   try {
     let { description, adid } = req.body;
 
@@ -75,7 +75,7 @@ exports.addAd_State = async (req, res) => {
 
     
 
-    let newAd_state = await db.ad_state.create({
+    let newAdState = await db.ad_state.create({
       description: description,
       adsadid: adid,
     });
@@ -92,7 +92,7 @@ exports.addAd_State = async (req, res) => {
   }
 };
 
-exports.editAd_State = async (req, res) => {
+exports.editAdState = async (req, res) => {
   try {
     let id = req.params.id;
     let idUserToken = req.user.id;
@@ -129,7 +129,7 @@ exports.editAd_State = async (req, res) => {
   }
 };
 
-exports.removeAd_State = async (req, res) => {
+exports.removeAdState = async (req, res) => {
   try {
     let id = req.params.id;
     let idUserToken = req.user.id;

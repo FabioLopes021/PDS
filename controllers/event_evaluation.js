@@ -4,7 +4,7 @@ const event_evaluation = require("../models/event_evaluation");
 const user = require("../models/user");
 const event_status = require("../models/event_status");
 
-exports.getEvents_Eval = async (req, res) => {
+exports.getEventsEval = async (req, res) => {
   try {
     let event_evaluation = await db.event_evaluation.findAll();
 
@@ -29,7 +29,7 @@ exports.getEvents_Eval = async (req, res) => {
   }
 };
 
-exports.getEvent_Eval = async (req, res) => {
+exports.getEventEval = async (req, res) => {
   try {
     let id = req.params.id;
     /*
@@ -62,7 +62,7 @@ exports.getEvent_Eval = async (req, res) => {
   }
 };
 
-exports.addEvents_Eval = async (req, res) => {
+exports.addEventsEval = async (req, res) => {
   try {
     let { description, evaluation, user_id } = req.body;
 
@@ -77,7 +77,7 @@ exports.addEvents_Eval = async (req, res) => {
         return res.status(404).send({ success: 0, message: "Utilizador inexistente" });
       }
       */
-    let newEvent_Eval = await db.event_evaluation.create({
+    let newEventEval = await db.event_evaluation.create({
       ee_description: description,
       ee_evaluation: evaluation,
       useruid: user_id,
@@ -95,7 +95,7 @@ exports.addEvents_Eval = async (req, res) => {
   }
 };
 
-exports.editEvents_Eval = async (req, res) => {
+exports.editEventsEval = async (req, res) => {
   try {
     let id = req.params.id;
     let idUserToken = req.user.id;
@@ -140,7 +140,7 @@ exports.editEvents_Eval = async (req, res) => {
   }
 };
 
-exports.removeEvents_Eval = async (req, res) => {
+exports.removeEventsEval = async (req, res) => {
   try {
     let id = req.params.id;
     let idUserToken = req.user.id;

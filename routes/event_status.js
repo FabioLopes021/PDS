@@ -6,14 +6,14 @@ const login = require("../middleware/login");
 const utils = require("../utils");
 
 // List all ad states
-router.get("/event_status", event_statusController.getEvents_Status);
+router.get("/event_status", event_statusController.getEventsStatus);
 // List specific ad state
-router.get("/event_status/:id", event_statusController.getEvent_Status);
+router.get("/event_status/:id", event_statusController.getEventStatus);
 // Add ad state
-router.post("/event_status/add", login.required, event_statusController.addEvent_Status);
+router.post("/event_status/add", login.required, event_statusController.addEventStatus);
 // Edit ad
-router.put("/event_status/edit/:id", login.required, event_statusController.editEvent_Status);
+router.put("/event_status/edit/:id", login.required, event_statusController.editEventStatus);
 // Remove ad
-router.delete("/event_status/remove/:id", login.required, event_statusController.removeEvent_Status);
+router.delete("/event_status/remove/:id", login.required, event_statusController.removeEventStatus);
 
 module.exports = router;

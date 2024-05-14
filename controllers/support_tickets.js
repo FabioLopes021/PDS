@@ -1,7 +1,7 @@
 const db = require('../config/mysql');
 const utils = require("../utils/index");
 
-exports.getSupport_tickets = async (req, res) => {
+exports.getSupportTickets = async (req, res) => {
 	try {
 		let tickets = await db.support_ticket.findAll();
 
@@ -29,7 +29,7 @@ exports.getSupport_tickets = async (req, res) => {
 	}
 };
 
-exports.getSupport_Ticket = async (req, res) => {
+exports.getSupportTicket = async (req, res) => {
 	try {
 		let id = req.params.id;
 
@@ -61,7 +61,7 @@ exports.getSupport_Ticket = async (req, res) => {
 	}
 };
 
-exports.addSupport_Ticket = async (req, res) => {
+exports.addSupportTicket = async (req, res) => {
 	try {
 		let description = req.body.description;
 		let statessid = req.body.statessid;
@@ -75,7 +75,7 @@ exports.addSupport_Ticket = async (req, res) => {
 			return res.status(404).send({ success: 0, message: "Utilizador inexistente" });
 		}
 
-		let newSupport_Ticket = await db.support_ticket.create({
+		let newSupportTicket = await db.support_ticket.create({
 			Description: description,
 			support_statesssid: statessid,
 			museummid: museuid,
@@ -167,7 +167,7 @@ exports.informEstimatedDeadline = async (req, res) => {
 	}
 };
 
-exports.removeSupport_Ticket = async (req, res) => {
+exports.removeSupportTicket = async (req, res) => {
 	try {
 		let id = req.params.id;
 		let idUserToken = req.user.id;

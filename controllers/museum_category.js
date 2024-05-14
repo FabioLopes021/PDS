@@ -1,7 +1,7 @@
 const utils = require("../utils/index");
 const db = require("../config/mysql");
 
-exports.getMuseum_Categories = async (req, res) => {
+exports.getMuseumCategories = async (req, res) => {
   try {
     let museum_category = await db.museum_category.findAll();
 
@@ -23,7 +23,7 @@ exports.getMuseum_Categories = async (req, res) => {
   }
 };
 
-exports.getMuseum_Category = async (req, res) => {
+exports.getMuseumCategory = async (req, res) => {
   try {
     let id = req.params.id;
     /*
@@ -54,7 +54,7 @@ exports.getMuseum_Category = async (req, res) => {
   }
 };
 
-exports.addMuseum_Category = async (req, res) => {
+exports.addMuseumCategory = async (req, res) => {
   try {
     let { description } = req.body;
 
@@ -69,7 +69,7 @@ exports.addMuseum_Category = async (req, res) => {
         return res.status(404).send({ success: 0, message: "Utilizador inexistente" });
       }
       */
-    let newMuseum_Category = await db.museum_category.create({
+    let newMuseumCategory = await db.museum_category.create({
       mc_description: description,
     });
 
@@ -85,7 +85,7 @@ exports.addMuseum_Category = async (req, res) => {
   }
 };
 
-exports.editMuseum_Category = async (req, res) => {
+exports.editMuseumCategory = async (req, res) => {
   try {
     let id = req.params.id;
     let idUserToken = req.user.id;
@@ -122,7 +122,7 @@ exports.editMuseum_Category = async (req, res) => {
   }
 };
 
-exports.removeMuseum_Category = async (req, res) => {
+exports.removeMuseumCategory = async (req, res) => {
   try {
     let id = req.params.id;
     let idUserToken = req.user.id;
