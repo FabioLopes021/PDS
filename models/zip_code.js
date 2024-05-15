@@ -2,7 +2,6 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('zip_code', {
     zipid: {
-      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
@@ -18,7 +17,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__zip_code__240C764D421E1CD5",
+        name: "PK__zip_code__240C764D61B180FA",
         unique: true,
         fields: [
           { name: "zipid" },

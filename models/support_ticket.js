@@ -38,6 +38,18 @@ module.exports = function(sequelize, DataTypes) {
     priority: {
       type: DataTypes.INTEGER,
       allowNull: true
+    },
+    deadline: {
+      type: DataTypes.DATEONLY,
+      allowNull: true
+    },
+    admin_useruid: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'user',
+        key: 'uid'
+      }
     }
   }, {
     sequelize,
@@ -46,7 +58,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__support___312D1FC720C4BA0E",
+        name: "PK__support___312D1FC7D14CDB51",
         unique: true,
         fields: [
           { name: "stid" },

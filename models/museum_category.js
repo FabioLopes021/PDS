@@ -9,7 +9,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     mc_description: {
       type: DataTypes.STRING(255),
-      allowNull: true
+      allowNull: false
     }
   }, {
     sequelize,
@@ -18,7 +18,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__museum_c__7BBD3CAF1CB13B52",
+        name: "PK__museum_c__7BBD3CAF8F9B6DEE",
         unique: true,
         fields: [
           { name: "mcid" },

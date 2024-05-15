@@ -8,11 +8,7 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true
     },
     ticket_purchase_date: {
-      type: DataTypes.DATE,
-      allowNull: false
-    },
-    ticket_price: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DATEONLY,
       allowNull: false
     },
     eventeid: {
@@ -46,7 +42,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__ticket__DC105B0F3226CF4E",
+        name: "PK__ticket__DC105B0F1E7D9B97",
         unique: true,
         fields: [
           { name: "tid" },

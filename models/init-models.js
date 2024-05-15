@@ -1,4 +1,5 @@
 var DataTypes = require("sequelize").DataTypes;
+var _Invoice_status = require("./Invoice_status");
 var _ad = require("./ad");
 var _ad_state = require("./ad_state");
 var _artist = require("./artist");
@@ -13,6 +14,7 @@ var _museum = require("./museum");
 var _museum_category = require("./museum_category");
 var _museum_evaluation = require("./museum_evaluation");
 var _notification = require("./notification");
+var _notification_state = require("./notification_state");
 var _notification_type = require("./notification_type");
 var _piece = require("./piece");
 var _piece_category = require("./piece_category");
@@ -36,6 +38,7 @@ var _usermuseum = require("./usermuseum");
 var _zip_code = require("./zip_code");
 
 function initModels(sequelize) {
+  var Invoice_status = _Invoice_status(sequelize, DataTypes);
   var ad = _ad(sequelize, DataTypes);
   var ad_state = _ad_state(sequelize, DataTypes);
   var artist = _artist(sequelize, DataTypes);
@@ -50,6 +53,7 @@ function initModels(sequelize) {
   var museum_category = _museum_category(sequelize, DataTypes);
   var museum_evaluation = _museum_evaluation(sequelize, DataTypes);
   var notification = _notification(sequelize, DataTypes);
+  var notification_state = _notification_state(sequelize, DataTypes);
   var notification_type = _notification_type(sequelize, DataTypes);
   var piece = _piece(sequelize, DataTypes);
   var piece_category = _piece_category(sequelize, DataTypes);
@@ -86,10 +90,14 @@ function initModels(sequelize) {
   user.belongsToMany(product, { as: 'productprodid_product_favorites', through: favorites, foreignKey: "useruid", otherKey: "productprodid" });
   user.belongsToMany(product, { as: 'productprodid_product_product_evaluations', through: product_evaluation, foreignKey: "useruid", otherKey: "productprodid" });
   user.belongsToMany(support_ticket, { as: 'support_ticketstid_support_tickets', through: support_evaluation, foreignKey: "useruid", otherKey: "support_ticketstid" });
-  ad_state.belongsTo(ad, { as: "adsad", foreignKey: "adsadid"});
-  ad.hasMany(ad_state, { as: "ad_states", foreignKey: "adsadid"});
+  purchase_invoice.belongsTo(Invoice_status, { as: "Invoice_statusinvoicestatus", foreignKey: "Invoice_statusinvoicestatusid"});
+  Invoice_status.hasMany(purchase_invoice, { as: "purchase_invoices", foreignKey: "Invoice_statusinvoicestatusid"});
+  sale_invoice.belongsTo(Invoice_status, { as: "Invoice_statusinvoicestatus", foreignKey: "Invoice_statusinvoicestatusid"});
+  Invoice_status.hasMany(sale_invoice, { as: "sale_invoices", foreignKey: "Invoice_statusinvoicestatusid"});
   proposal.belongsTo(ad, { as: "adad", foreignKey: "adadid"});
   ad.hasMany(proposal, { as: "proposals", foreignKey: "adadid"});
+  ad.belongsTo(ad_state, { as: "ad_stateadst", foreignKey: "ad_stateadstid"});
+  ad_state.hasMany(ad, { as: "ads", foreignKey: "ad_stateadstid"});
   piece.belongsTo(artist, { as: "artistum", foreignKey: "artistaid"});
   artist.hasMany(piece, { as: "pieces", foreignKey: "artistaid"});
   piece.belongsTo(collection, { as: "collectionc", foreignKey: "collectioncid"});
@@ -110,6 +118,8 @@ function initModels(sequelize) {
   museum.hasMany(piece, { as: "pieces", foreignKey: "museummid"});
   product.belongsTo(museum, { as: "museumm", foreignKey: "museummid"});
   museum.hasMany(product, { as: "products", foreignKey: "museummid"});
+  proposal.belongsTo(museum, { as: "museumm", foreignKey: "museummid"});
+  museum.hasMany(proposal, { as: "proposals", foreignKey: "museummid"});
   purchase_invoice.belongsTo(museum, { as: "museumm", foreignKey: "museummid"});
   museum.hasMany(purchase_invoice, { as: "purchase_invoices", foreignKey: "museummid"});
   support_ticket.belongsTo(museum, { as: "museumm", foreignKey: "museummid"});
@@ -118,6 +128,8 @@ function initModels(sequelize) {
   museum.hasMany(usermuseum, { as: "usermuseums", foreignKey: "museummid"});
   museum.belongsTo(museum_category, { as: "museum_categorymc", foreignKey: "museum_categorymcid"});
   museum_category.hasMany(museum, { as: "museums", foreignKey: "museum_categorymcid"});
+  notification.belongsTo(notification_state, { as: "notification_staten", foreignKey: "notification_statensid"});
+  notification_state.hasMany(notification, { as: "notifications", foreignKey: "notification_statensid"});
   notification.belongsTo(notification_type, { as: "notification_typent", foreignKey: "notification_typentid"});
   notification_type.hasMany(notification, { as: "notifications", foreignKey: "notification_typentid"});
   ad.belongsTo(piece, { as: "piecep", foreignKey: "piecepid"});
@@ -162,8 +174,10 @@ function initModels(sequelize) {
   user.hasMany(sale_invoice, { as: "sale_invoices", foreignKey: "useruid"});
   support_evaluation.belongsTo(user, { as: "useru", foreignKey: "useruid"});
   user.hasMany(support_evaluation, { as: "support_evaluations", foreignKey: "useruid"});
+  support_ticket.belongsTo(user, { as: "admin_useru", foreignKey: "admin_useruid"});
+  user.hasMany(support_ticket, { as: "support_tickets", foreignKey: "admin_useruid"});
   support_ticket.belongsTo(user, { as: "useru", foreignKey: "useruid"});
-  user.hasMany(support_ticket, { as: "support_tickets", foreignKey: "useruid"});
+  user.hasMany(support_ticket, { as: "useru_support_tickets", foreignKey: "useruid"});
   ticket.belongsTo(user, { as: "useru", foreignKey: "useruid"});
   user.hasMany(ticket, { as: "tickets", foreignKey: "useruid"});
   usermuseum.belongsTo(user, { as: "useru", foreignKey: "useruid"});
@@ -172,14 +186,11 @@ function initModels(sequelize) {
   user_status.hasMany(user, { as: "users", foreignKey: "user_statusus_id"});
   user.belongsTo(user_type, { as: "user_typeut", foreignKey: "user_typeutid"});
   user_type.hasMany(user, { as: "users", foreignKey: "user_typeutid"});
-  proposal.belongsTo(usermuseum, { as: "usermuseummuseumm", foreignKey: "usermuseummuseummid"});
-  usermuseum.hasMany(proposal, { as: "proposals", foreignKey: "usermuseummuseummid"});
-  proposal.belongsTo(usermuseum, { as: "usermuseumuseru", foreignKey: "usermuseumuseruid"});
-  usermuseum.hasMany(proposal, { as: "usermuseumuseru_proposals", foreignKey: "usermuseumuseruid"});
   museum.belongsTo(zip_code, { as: "zip_codezip", foreignKey: "zip_codezipid"});
   zip_code.hasMany(museum, { as: "museums", foreignKey: "zip_codezipid"});
 
   return {
+    Invoice_status,
     ad,
     ad_state,
     artist,
@@ -194,6 +205,7 @@ function initModels(sequelize) {
     museum_category,
     museum_evaluation,
     notification,
+    notification_state,
     notification_type,
     piece,
     piece_category,

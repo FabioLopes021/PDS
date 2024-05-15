@@ -9,7 +9,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     piece_name: {
       type: DataTypes.STRING(255),
-      allowNull: true
+      allowNull: false
     },
     artistaid: {
       type: DataTypes.INTEGER,
@@ -50,7 +50,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__piece__DD37D91ACC1BE397",
+        name: "PK__piece__DD37D91A18A1EA4E",
         unique: true,
         fields: [
           { name: "pid" },

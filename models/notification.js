@@ -9,7 +9,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     n_description: {
       type: DataTypes.STRING(255),
-      allowNull: true
+      allowNull: false
     },
     notification_typentid: {
       type: DataTypes.INTEGER,
@@ -26,6 +26,14 @@ module.exports = function(sequelize, DataTypes) {
         model: 'user',
         key: 'uid'
       }
+    },
+    notification_statensid: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'notification_state',
+        key: 'nsid'
+      }
     }
   }, {
     sequelize,
@@ -34,7 +42,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__notifica__DF97D0F5F9346775",
+        name: "PK__notifica__DF97D0F5F243FB89",
         unique: true,
         fields: [
           { name: "nid" },

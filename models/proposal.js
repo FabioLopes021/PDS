@@ -19,20 +19,12 @@ module.exports = function(sequelize, DataTypes) {
         key: 'adid'
       }
     },
-    usermuseummuseummid: {
+    museummid: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'usermuseum',
-        key: 'useruid'
-      }
-    },
-    usermuseumuseruid: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'usermuseum',
-        key: 'useruid'
+        model: 'museum',
+        key: 'mid'
       }
     }
   }, {
@@ -42,7 +34,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__proposal__3EB6EC3C24485DF4",
+        name: "PK__proposal__3EB6EC3C60358C57",
         unique: true,
         fields: [
           { name: "proposalid" },

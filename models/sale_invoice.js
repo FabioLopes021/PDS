@@ -8,7 +8,7 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true
     },
     invoice_departure_date: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: true
     },
     useruid: {
@@ -18,6 +18,14 @@ module.exports = function(sequelize, DataTypes) {
         model: 'user',
         key: 'uid'
       }
+    },
+    Invoice_statusinvoicestatusid: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Invoice_status',
+        key: 'invoicestatusid'
+      }
     }
   }, {
     sequelize,
@@ -26,7 +34,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__sale_inv__F67992D086467502",
+        name: "PK__sale_inv__F67992D07D400838",
         unique: true,
         fields: [
           { name: "sale_invoiceid" },

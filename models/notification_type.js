@@ -9,7 +9,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     nt_description: {
       type: DataTypes.STRING(255),
-      allowNull: true
+      allowNull: false
     }
   }, {
     sequelize,
@@ -18,7 +18,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__notifica__718E5494A138BB63",
+        name: "PK__notifica__718E549434717C45",
         unique: true,
         fields: [
           { name: "ntid" },

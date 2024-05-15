@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('ad_state', {
-    adstid: {
+  return sequelize.define('Invoice_status', {
+    invoicestatusid: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -9,19 +9,19 @@ module.exports = function(sequelize, DataTypes) {
     },
     description: {
       type: DataTypes.STRING(255),
-      allowNull: false
+      allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'ad_state',
+    tableName: 'Invoice_status',
     schema: 'dbo',
     timestamps: false,
     indexes: [
       {
-        name: "PK__ad_state__E9529D2349FC7BA9",
+        name: "PK__Invoice___E6145C7757598668",
         unique: true,
         fields: [
-          { name: "adstid" },
+          { name: "invoicestatusid" },
         ]
       },
     ]

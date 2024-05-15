@@ -9,7 +9,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     desc_ticket_status: {
       type: DataTypes.STRING(255),
-      allowNull: true
+      allowNull: false
     }
   }, {
     sequelize,
@@ -18,7 +18,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__ticket_s__F310C15B3E27FD67",
+        name: "PK__ticket_s__F310C15BBECDEC47",
         unique: true,
         fields: [
           { name: "ts_id" },

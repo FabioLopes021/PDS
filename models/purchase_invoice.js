@@ -8,7 +8,7 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true
     },
     purchase_entry_date: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: true
     },
     museummid: {
@@ -17,6 +17,14 @@ module.exports = function(sequelize, DataTypes) {
       references: {
         model: 'museum',
         key: 'mid'
+      }
+    },
+    Invoice_statusinvoicestatusid: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Invoice_status',
+        key: 'invoicestatusid'
       }
     }
   }, {

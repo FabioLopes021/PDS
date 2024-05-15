@@ -26,6 +26,14 @@ module.exports = function(sequelize, DataTypes) {
     description: {
       type: DataTypes.STRING(255),
       allowNull: true
+    },
+    ad_stateadstid: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'ad_state',
+        key: 'adstid'
+      }
     }
   }, {
     sequelize,
@@ -34,7 +42,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__ad__56B503F03D36BBF6",
+        name: "PK__ad__56B503F0E8796997",
         unique: true,
         fields: [
           { name: "adid" },

@@ -9,7 +9,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     pc_description: {
       type: DataTypes.STRING(255),
-      allowNull: true
+      allowNull: false
     }
   }, {
     sequelize,
@@ -18,7 +18,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__piece_ca__83E06A9F562A1526",
+        name: "PK__piece_ca__83E06A9F7A29FF59",
         unique: true,
         fields: [
           { name: "pcid" },

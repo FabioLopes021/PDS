@@ -1,27 +1,27 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('ad_state', {
-    adstid: {
+  return sequelize.define('notification_state', {
+    nsid: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    description: {
+    ns_description: {
       type: DataTypes.STRING(255),
       allowNull: false
     }
   }, {
     sequelize,
-    tableName: 'ad_state',
+    tableName: 'notification_state',
     schema: 'dbo',
     timestamps: false,
     indexes: [
       {
-        name: "PK__ad_state__E9529D2349FC7BA9",
+        name: "PK__notifica__6E619001A05FD15A",
         unique: true,
         fields: [
-          { name: "adstid" },
+          { name: "nsid" },
         ]
       },
     ]

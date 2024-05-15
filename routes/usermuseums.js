@@ -1,24 +1,19 @@
 const express = require("express");
 const router = express.Router();
 
-const UserTypeController = require("../controllers/user_types");
+const UserMuseumController = require("../controllers/usermuseums");
 const login = require("../middleware/login");
 
 // list All evaluations
-router.get("/UserType", UserTypeController.getAllUserTypes);
+router.get("/UserMuseum", UserMuseumController.getAllUserMuseum);
 
 // list certain evaluation
-router.get("/UserType/:id", UserTypeController.getUserType);
+router.get("/UserMuseum/specific", UserMuseumController.getUserMuseum);
 
 // Add evaluations
-router.post("/UserType/add", login.required, UserTypeController.addUserType);
+router.post("/UserMuseum/add", login.required, UserMuseumController.addUserMuseum);
 
-//testar
-// Edit evaluation
-router.put("/UserType/edit/:id", login.required, UserTypeController.editUserType);
-
-//testar
 // Remove evaluation
-router.delete("/UserType/remove/:id", login.required, UserTypeController.removeUserState);
+router.delete("/UserMuseum/remove", login.required, UserMuseumController.removeUserMuseum);
  
 module.exports = router;

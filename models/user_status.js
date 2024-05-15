@@ -9,7 +9,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     us_description: {
       type: DataTypes.STRING(255),
-      allowNull: true
+      allowNull: false
     }
   }, {
     sequelize,
@@ -18,7 +18,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "PK__user_sta__2E701A672A1BACF1",
+        name: "PK__user_sta__2E701A67C0CDF08E",
         unique: true,
         fields: [
           { name: "us_id" },
