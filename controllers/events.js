@@ -63,6 +63,7 @@ exports.getEvent = async (req, res) => {
   }
 };
 
+
 exports.addEvent = async (req, res) => {
   try {
     let { start_date, end_date, type, museum, status } = req.body;

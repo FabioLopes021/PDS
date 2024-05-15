@@ -43,6 +43,11 @@ exports.getEventEval = async (req, res) => {
 
     if (!event) return res.status(404).send({ success: 0, message: "Evento inexistente" });
 
+    let event_evaluation = await db.event_evaluation.findAll({
+      where:{
+        eventeid:id
+      }});
+
     let response = {
       success: 1,
       length: 1,
